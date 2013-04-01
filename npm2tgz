@@ -66,6 +66,30 @@ mkdir -p $PKG
 DESTDIR=$PKG npm install -g $PRGNAM
 
 VERSION=$(grep -i "\"version\": \"\(.*\)\"," $PKG/usr/lib$(uname -m | grep -o "64")/node_modules/$PRGNAM/package.json | sed 's|^[ ]*"version": "\(.*\)",$|\1|g')
+DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PKG/usr/lib$(uname -m | grep -o "64")/node_modules/$PRGNAM/package.json | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
+HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PKG/usr/lib$(uname -m | grep -o "64")/node_modules/$PRGNAM/package.json | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
+
+mkdir -p $PKG/install
+cat <<EOF > $PKG/install/slack-desc
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|'
+# on the right side marks the last column you can put a character in.  You must
+# make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':'.
+       |-----handy-ruler------------------------------------------------------|
+$PRGNAM: $PRGNAM ($DESCRIPTION)
+$PRGNAM: 
+$PRGNAM: 
+$PRGNAM: 
+$PRGNAM: 
+$PRGNAM: 
+$PRGNAM: 
+$PRGNAM: 
+$PRGNAM: 
+$PRGNAM: $HOMEPAGE
+$PRGNAM: 
+EOF
 
 cd $PKG
 makepkg -l y -c n $OUTPUT/$PRGNAM-$(echo $VERSION | tr - .)-$ARCH-$BUILD$TAG.txz
