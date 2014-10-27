@@ -39,8 +39,7 @@ OUTPUT=${OUTPUT:=/tmp}
 ARCH=${ARCH:=npmjs}
 PREFIX=${PREFIX:=/usr}
 NPMBIN=${NPMBIN:=/usr/bin/npm}
-
-PKG=/tmp/$TAG/pkg-$PRGNAM
+NPMROOT=${NPMROOT:-$(NPMBIN -g root)}
 
 [ ! -x $NPMBIN ] && echo "npm missing" && exit 1
 if [ "x$1" == "x" ] || [ "x$1" == "x--help" ] || [ "x$1" == "x-h" ]; then
@@ -54,20 +53,22 @@ if [ "x$1" == "x" ] || [ "x$1" == "x--help" ] || [ "x$1" == "x-h" ]; then
 	echo "    ARCH=<value>   (currently: $ARCH)"
 	echo "    PREFIX=<value> (currently: $PREFIX)"
 	echo "    NPMBIN=<value> (currently: $NPMBIN)"
-	
+	echo "    NPMROOT=<value> (currently: $NPMROOT)"
+
 	exit 1
 fi
 
 PRGNAM=$1
+PKG=/tmp/$TAG/pkg-$PRGNAM
 
 [ -e $PKG ] && rm -fr $PKG
 mkdir -p $PKG
 
 DESTDIR=$PKG npm install -g $PRGNAM
 
-VERSION=$(grep -i "\"version\": \"\(.*\)\"," $PKG/usr/lib$(uname -m | grep -o "64")/node_modules/$PRGNAM/package.json | sed 's|^[ ]*"version": "\(.*\)",$|\1|g')
-DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PKG/usr/lib$(uname -m | grep -o "64")/node_modules/$PRGNAM/package.json | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
-HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PKG/usr/lib$(uname -m | grep -o "64")/node_modules/$PRGNAM/package.json | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
+VERSION=$(grep -i "\"version\": \"\(.*\)\"," $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"version": "\(.*\)",$|\1|g')
+DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
+HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
 
 mkdir -p $PKG/install
 cat <<EOF > $PKG/install/slack-desc
