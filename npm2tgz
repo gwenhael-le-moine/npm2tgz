@@ -39,7 +39,7 @@ OUTPUT=${OUTPUT:=/tmp}
 ARCH=${ARCH:=npmjs}
 PREFIX=${PREFIX:=/usr}
 NPMBIN=${NPMBIN:=/usr/bin/npm}
-NPMROOT=${NPMROOT:-$(NPMBIN -g root)}
+NPMROOT=${NPMROOT:-$($NPMBIN -g root)}
 
 [ ! -x $NPMBIN ] && echo "npm missing" && exit 1
 if [ "x$1" == "x" ] || [ "x$1" == "x--help" ] || [ "x$1" == "x-h" ]; then
