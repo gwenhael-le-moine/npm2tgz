@@ -66,7 +66,7 @@ mkdir -p $PKG
 
 DESTDIR=$PKG npm install -g $PRGNAM
 
-VERSION=$(grep -i "\"version\": \"\(.*\)\"" $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"version": "\(.*\)",$|\1|g')
+VERSION=$(grep -i "\"version\": \"\(.*\)\"" $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"version": "\(.*\)"|\1|g')
 DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
 HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
 
