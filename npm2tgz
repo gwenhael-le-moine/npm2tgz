@@ -43,19 +43,19 @@ NPMROOT=${NPMROOT:-$($NPMBIN -g root)}
 
 [ ! -x $NPMBIN ] && echo "npm missing" && exit 1
 if [ "x$1" == "x" ] || [ "x$1" == "x--help" ] || [ "x$1" == "x-h" ]; then
-	echo "$0 generates a Slackware compatible package from a node module"
-	echo "  usage: <OPTIONS> $0 <modules_name>"
-	echo "  The resulting package is located under $OUTPUT"
-	echo "  possible OPTIONS are:"
-	echo "    BUILD=<value>  (currently: $BUILD)"
-	echo "    TAG=<value>    (currently: $TAG)"
-	echo "    OUTPUT=<value> (currently: $OUTPUT)"
-	echo "    ARCH=<value>   (currently: $ARCH)"
-	echo "    PREFIX=<value> (currently: $PREFIX)"
-	echo "    NPMBIN=<value> (currently: $NPMBIN)"
-	echo "    NPMROOT=<value> (currently: $NPMROOT)"
+    echo "$0 generates a Slackware compatible package from a node module"
+    echo "  usage: <OPTIONS> $0 <modules_name>"
+    echo "  The resulting package is located under $OUTPUT"
+    echo "  possible OPTIONS are:"
+    echo "    BUILD=<value>  (currently: $BUILD)"
+    echo "    TAG=<value>    (currently: $TAG)"
+    echo "    OUTPUT=<value> (currently: $OUTPUT)"
+    echo "    ARCH=<value>   (currently: $ARCH)"
+    echo "    PREFIX=<value> (currently: $PREFIX)"
+    echo "    NPMBIN=<value> (currently: $NPMBIN)"
+    echo "    NPMROOT=<value> (currently: $NPMROOT)"
 
-	exit 1
+    exit 1
 fi
 
 PRGNAM=$1
@@ -66,7 +66,7 @@ mkdir -p $PKG
 
 DESTDIR=$PKG npm install -g $PRGNAM
 
-VERSION=$(grep -i "\"version\": \"\(.*\)\"" $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"version": "\(.*\)"|\1|g')
+VERSION=$(grep -io "\"version\": \"\(.*\)\"" $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"version": "\(.*\)"|\1|g')
 DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
 HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
 
