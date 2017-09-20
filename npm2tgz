@@ -58,17 +58,19 @@ if [ "x$1" == "x" ] || [ "x$1" == "x--help" ] || [ "x$1" == "x-h" ]; then
     exit 1
 fi
 
-PRGNAM=$1
+NODE_PKG=$1
+
+PRGNAM=$(echo $NODE_PKG | tr / _ | tr -d @)
 PKG=/tmp/$TAG/pkg-$PRGNAM
 
 [ -e $PKG ] && rm -fr $PKG
 mkdir -p $PKG
 
-DESTDIR=$PKG npm install -g $PRGNAM
+DESTDIR=$PKG npm install -g $NODE_PKG
 
-VERSION=$(grep -io "\"version\": \"\(.*\)\"" $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"version": "\(.*\)"|\1|g')
-DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
-HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PKG${NPMROOT}/$PRGNAM/package.json | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
+VERSION=$(grep -io "\"version\": \"\(.*\)\"" $PKG${NPMROOT}/$NODE_PKG/package.json | sed 's|^[ ]*"version": "\(.*\)"|\1|g')
+DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PKG${NPMROOT}/$NODE_PKG/package.json | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
+HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PKG${NPMROOT}/$NODE_PKG/package.json | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
 
 mkdir -p $PKG/install
 cat <<EOF > $PKG/install/slack-desc
