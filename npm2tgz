@@ -60,7 +60,7 @@ fi
 
 NODE_PKG=$1
 
-PRGNAM=$(echo $NODE_PKG | tr / _ | tr -d @)
+PRGNAM=$(echo $NODE_PKG | tr / _ | sed 's|^@||' | cut -d@ -f1)
 PKG=/tmp/$TAG/pkg-$PRGNAM
 
 [ -e $PKG ] && rm -fr $PKG
@@ -68,9 +68,10 @@ mkdir -p $PKG
 
 DESTDIR=$PKG npm install -g $NODE_PKG
 
-VERSION=$(grep -io "\"version\": \"\(.*\)\"" $PKG${NPMROOT}/$NODE_PKG/package.json | sed 's|^[ ]*"version": "\(.*\)"|\1|g')
-DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PKG${NPMROOT}/$NODE_PKG/package.json | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
-HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PKG${NPMROOT}/$NODE_PKG/package.json | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
+PACKAGE_JSON=$(find $PKG${NPMROOT}/ -name package.json -maxdepth 3)
+VERSION=$(grep -io "\"version\": \"\(.*\)\"" $PACKAGE_JSON | sed 's|^[ ]*"version": "\(.*\)"|\1|g')
+DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PACKAGE_JSON | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
+HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PACKAGE_JSON | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
 
 mkdir -p $PKG/install
 cat <<EOF > $PKG/install/slack-desc
