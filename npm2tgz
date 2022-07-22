@@ -41,7 +41,7 @@ PREFIX=${PREFIX:=/usr}
 NPMBIN=${NPMBIN:=/usr/bin/npm}
 NPMROOT=${NPMROOT:-$($NPMBIN -g root)}
 
-[ ! -x $NPMBIN ] && echo "npm missing" && exit 1
+[ ! -x "$NPMBIN" ] && echo "npm missing" && exit 1
 if [ "x$1" == "x" ] || [ "x$1" == "x--help" ] || [ "x$1" == "x-h" ]; then
     echo "$0 generates a Slackware compatible package from a node module"
     echo "  usage: <OPTIONS> $0 <modules_name>"
@@ -60,21 +60,21 @@ fi
 
 NODE_PKG=$1
 
-PRGNAM=$(echo $NODE_PKG | tr / _ | sed 's|^@||' | cut -d@ -f1)
+PRGNAM=$(echo "$NODE_PKG" | tr / _ | sed 's|^@||' | cut -d@ -f1)
 PKG=/tmp/$TAG/pkg-$PRGNAM
 
-[ -e $PKG ] && rm -fr $PKG
-mkdir -p $PKG
+[ -e "$PKG" ] && rm -fr "$PKG"
+mkdir -p "$PKG"
 
-DESTDIR=$PKG npm install -g $NODE_PKG
+DESTDIR=$PKG npm install -g "$NODE_PKG"
 
-PACKAGE_JSON=$(find $PKG${NPMROOT}/ -name package.json -maxdepth 3)
-VERSION=$(grep -io "\"version\": \"\(.*\)\"" $PACKAGE_JSON | sed 's|^[ ]*"version": "\(.*\)"|\1|g')
-DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," $PACKAGE_JSON | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
-HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," $PACKAGE_JSON | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
+PACKAGE_JSON=$(find "$PKG$NPMROOT/" -name package.json -maxdepth 3)
+VERSION=$(grep -io "\"version\": \"\(.*\)\"" "$PACKAGE_JSON" | sed 's|^[ ]*"version": "\(.*\)"|\1|g')
+DESCRIPTION=$(grep -i "\"description\": \"\(.*\)\"," "$PACKAGE_JSON" | sed 's|^[ ]*"description": "\(.*\)",$|\1|g')
+HOMEPAGE=$(grep -i "\"homepage\": \"\(.*\)\"," "$PACKAGE_JSON" | sed 's|^[ ]*"homepage": "\(.*\)",$|\1|g')
 
-mkdir -p $PKG/install
-cat <<EOF > $PKG/install/slack-desc
+mkdir -p "$PKG/install"
+cat <<EOF > "$PKG/install/slack-desc"
 # HOW TO EDIT THIS FILE:
 # The "handy ruler" below makes it easier to edit a package description.  Line
 # up the first '|' above the ':' following the base package name, and the '|'
@@ -95,5 +95,5 @@ $PRGNAM: $HOMEPAGE
 $PRGNAM:
 EOF
 
-cd $PKG
-makepkg -l y -c n $OUTPUT/$PRGNAM-$(echo $VERSION | tr - .)-$ARCH-$BUILD$TAG.txz
+cd "$PKG"
+makepkg -l y -c n "$OUTPUT/$PRGNAM-$(echo "$VERSION" | tr - .)-$ARCH-$BUILD$TAG.txz"
