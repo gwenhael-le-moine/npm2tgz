@@ -61,7 +61,7 @@ fi
 NODE_PKG=$1
 
 PRGNAM=$(echo "$NODE_PKG" | tr / _ | sed 's|^@||' | cut -d@ -f1)
-PKG=/tmp/$TAG/pkg-$PRGNAM
+PKG=${TMPDIR:-/tmp}/$TAG/pkg-$PRGNAM
 
 [ -e "$PKG" ] && rm -fr "$PKG"
 mkdir -p "$PKG"
