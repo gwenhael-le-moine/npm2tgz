@@ -42,7 +42,7 @@ NPMBIN=${NPMBIN:=/usr/bin/npm}
 NPMROOT=${NPMROOT:-$($NPMBIN -g root)}
 
 [ ! -x "$NPMBIN" ] && echo "npm missing" && exit 1
-if [ "x$1" == "x" ] || [ "x$1" == "x--help" ] || [ "x$1" == "x-h" ]; then
+if [ $# -eq 0 ] || [ "$1" = --help ] || [ "$1" = -h ]; then
     echo "$0 generates a Slackware compatible package from a node module"
     echo "  usage: <OPTIONS> $0 <modules_name>"
     echo "  The resulting package is located under $OUTPUT"
@@ -95,5 +95,5 @@ $PRGNAM: $HOMEPAGE
 $PRGNAM:
 EOF
 
-cd "$PKG"
+cd "$PKG" &&
 makepkg -l y -c n "$OUTPUT/$PRGNAM-$(echo "$VERSION" | tr - .)-$ARCH-$BUILD$TAG.txz"
