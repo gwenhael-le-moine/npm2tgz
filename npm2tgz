@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Author:: Gwenhael Le Moine <gwenhael.le.moine@gmail.com>
 # Copyright:: Copyright (c) 2013, Gwenhael Le Moine
@@ -34,7 +34,7 @@
 #
 
 BUILD=${BUILD:=1}
-TAG=${TAG:=SBo}
+TAG=${TAG:=_SBo}
 OUTPUT=${OUTPUT:=/tmp}
 ARCH=${ARCH:=npmjs}
 PREFIX=${PREFIX:=/usr}
@@ -96,4 +96,4 @@ $PRGNAM:
 EOF
 
 cd "$PKG" &&
-makepkg -l y -c n "$OUTPUT/$PRGNAM-$(echo "$VERSION" | tr - .)-$ARCH-$BUILD$TAG.txz"
+makepkg -l y -c n "$OUTPUT/$PRGNAM-${VERSION//-/.}-$ARCH-$BUILD$TAG.txz"
